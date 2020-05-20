@@ -14,12 +14,20 @@ class AttractionSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field = "id"
         )
         fields = ('id', 'url', 'name', 'area')
+        depth = 1 
 
 class Attractions(ViewSet):
 
     def list(self, request):
 
         attractions = Attraction.objects.all()
+
+        #adding a query parameter to request
+        area = self.request.query_params.get('area', None)
+        if area is not None:
+            attractions = attractions.filter(area__id=area)
+        
+
         serializer = AttractionSerializer(attractions, many=True, context = {'request': request})
         return Response(serializer.data)
     
