@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from kennywoodapi.models import Customer
+from django.contrib.auth import logout
 
 
 @csrf_exempt
@@ -72,3 +73,8 @@ def register_user(request):
     # Return the token to the client
     data = json.dumps({"token": token.key})
     return HttpResponse(data, content_type='application/json')
+
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page.
